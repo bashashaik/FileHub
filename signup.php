@@ -12,6 +12,7 @@ $lname=$_POST['lname'];
 $email=$_POST['email'];
 $password=$_POST['password'];
 $conn=oci_connect('system','123456','localhost/XE');
+$path="C:\dev\www\uploads";
 if(!$conn)
 {
 	echo 'Not connected to Database please try after some time.';
@@ -22,12 +23,27 @@ else
 	$statement= oci_parse($conn,"insert into users(sno,fname,lname,email,password,doj)
 	 values(nvl((select max(sno)from users),785)+1,'$fname','$lname','$email','$password', sysdate)");
 	oci_execute($statement);
-	echo 'Welcome ' . $fname .' '. $lname;
-	echo ' <br/> ';
-	echo 'Your E-mail is '. $email .' this would be your log in ID' ;
-	echo '<br />';
-	echo 'Your password is '.$password . ' this would be your log in password';
-	oci_close($conn);
+	$mkdir=oci_parse($conn,"select sno from users where email='$email' ");
+	oci_execute($mkdir);
+	while($row=oci_fetch_array($mkdir))
+	{
+		$sno=$row[0];
+	}
+	$mkdir_true=mkdir("$path/$sno");
+	if(!$mkdir_true)
+	{
+		die("Could not create folder.");
+	}
+	else
+	{
+		echo 'Welcome ' . $fname .' '. $lname;
+		echo ' <br/> ';
+		echo 'Your E-mail is '. $email .' this would be your log in ID' ;
+		echo '<br />';
+		echo 'Your password is '.$password . ' this would be your log in password';
+		
+	}
+oci_close($conn);
 }
 ?>
 <br />

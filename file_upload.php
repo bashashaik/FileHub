@@ -1,5 +1,5 @@
 
-<?php
+<?php //Session 
 session_start();
 if(isset($_SESSION["username"],$_SESSION["password"]))
 {
@@ -11,7 +11,17 @@ else
 }
 ?>
 
-<?php
+<?php //Connection to Oracle for SNO
+$conn=oci_connect("system","123456","localhost/XE");
+$statement=oci_parse($conn,"select sno from users where email='$email'");
+oci_execute($statement);
+	while($row=oci_fetch_array($statement))
+	{
+		$sno=$row[0];
+	}
+?>
+
+<?php // File Upload
 if($_FILES["file"]["error"]>0)
 {
 	echo "Error: " . $_FILES["file"]["error"];
@@ -22,7 +32,8 @@ else
 	$filetype= $_FILES["file"]["type"];
 	$filesize= $_FILES["file"]["size"];
 	$temp_name=$_FILES["file"]["tmp_name"];
-	$dest_addr= "C:\dev\www\uploads";
+	$dest_addr= "C:\dev\www\uploads\\";
+	$dest_addr.=$sno;
 	$moved=move_uploaded_file($temp_name,"$dest_addr/$filename");
 	if(!$moved)
 	{

@@ -2,6 +2,7 @@
 session_start();
 $_SESSION["username"]=$_POST["loginid"];
 $_SESSION["password"]=$_POST["password"];
+$_SESSION["sno"];
 ?>
 <?php
 $conn= oci_connect("system","123456","localhost/XE");

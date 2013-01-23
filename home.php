@@ -36,20 +36,23 @@ function fileupload()
 <?php   //Database connection 
 $fname;
 $statement;
+$sno;
 $conn=oci_connect("system","123456","localhost/XE");
 if(!$conn)
 {
-	echo "Could not connect to databse. ";
+	echo "Could not connect to database. ";
 }
 else
 {
-	global $statement, $conn, $email;
-	$statement =oci_parse($conn," select fname from users where email='$email' ");
+	global $statement, $conn, $email, $sno;
+	$statement =oci_parse($conn," select sno,fname from users where email='$email' ");
 	oci_execute($statement);
 	while($row=oci_fetch_array($statement))
 	{
-		global $fname;
-		$fname= $row[0];
+		global $fname, $sno;
+		$sno=$row[0];
+		$fname= $row[1];
+		$_SESSION["sno"]=$sno;
 
 	}
 
@@ -84,7 +87,8 @@ else
 </form>
 <form action="download_file.php" method="post">
 <?php
-$down_path="C:\dev\www\uploads";
+$down_path="C:\dev\www\uploads\\";
+$down_path.=$sno;
 $down_entry;
 $down_handler=opendir($down_path);
 while(($down_entry=readdir($down_handler))!==false)

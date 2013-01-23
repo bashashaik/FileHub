@@ -1,6 +1,6 @@
 <?php
 session_start();
-if(isset($_SESSION["username"],$_SESSION["password"]))
+if(isset($_SESSION["username"],$_SESSION["password"],$_SESSION["sno"]))
 {
 	$email=$_SESSION["username"];
 }
@@ -11,7 +11,8 @@ else
 ?>
 <?php
 $to_download=$_POST["selected_file"];
-$down_path="C:\dev\www\uploads";
+$down_path="C:\dev\www\uploads\\";
+$down_path.=$_SESSION["sno"];
 $filename=$to_download;
 $finalpath="$down_path/$filename";
 if (file_exists($finalpath)) {
@@ -30,4 +31,4 @@ if (file_exists($finalpath)) {
     exit;
 }
 ?>
-?>
+
