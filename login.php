@@ -37,6 +37,8 @@ else
 	else
 	{
 		echo "Username or Password do not match please again.";
+		session_unset();
+		session_destroy();
 	}
 	oci_close($conn);
 
